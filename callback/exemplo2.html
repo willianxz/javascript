@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<script>
+
+function myPromiss(valor){
+  setTimeout(() => {
+    valor(true);
+  }, 3000);  
+}
+
+
+function myFunctionCallback(callback){ 
+  myPromiss(callback);  
+}
+
+
+function myFunctionCallbackResponse(){
+   myFunctionCallback((response) => {
+     console.log(response);
+   });
+}
+
+
+myFunctionCallbackResponse();
+
+
+</script>
+
+</body>
+</html>
+

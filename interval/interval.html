@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+var myVar = setInterval(function(){
+   myTimer() 
+}, 5000);
+
+$(document).ready(function(){
+    $("#start").click(function(){
+        myVar = setInterval(function(){
+         myTimer() 
+      }, 3000);
+    });
+    
+    $("#stop").click(function(){
+        myStopFunction();
+    });
+});
+
+
+
+function myTimer() {
+			  var r1 = 1 + Math.floor(Math.random() * 2);
+              var r2 = 1 + Math.floor(Math.random() * 5);
+              var r3 = 1 + Math.floor(Math.random() * 5);
+               
+              var g1 = 1 + Math.floor(Math.random() * 2);
+              var g2 = 1 + Math.floor(Math.random() * 5);
+              var g3 = 1 + Math.floor(Math.random() * 5);
+               
+               
+              var b1 = 1 + Math.floor(Math.random() * 2);
+              var b2 = 1 + Math.floor(Math.random() * 5);
+              var b3 = 1 + Math.floor(Math.random() * 5);  
+
+     $("body").css("text-shadow", "4px 4px 4px rgb("+r1+""+r2+""+r3+","+g1+""+g2+""+g3+","+b1+""+b2+""+b3+")");
+    
+}
+
+function myStopFunction() {
+    clearInterval(myVar);
+}
+
+</script>
+</head>
+<body>
+
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque vitae nisl eu risus scelerisque gravida. Sed sed magna sed ipsum semper dictum. Sed ligula massa, eleifend at volutpat vel, pretium ut metus. Maecenas pharetra elit at quam sagittis vestibulum. Phasellus elit purus, aliquet eget arcu nec, auctor consectetur diam. Morbi id tellus et turpis accumsan ultrices id nec nibh. Ut quis libero lacus. Vivamus turpis metus, commodo in blandit quis, faucibus sed urna. Sed tempus vulputate enim malesuada euismod. Donec et mi et metus viverra semper id nec lectus. Vestibulum eget blandit nisi. Proin congue sagittis condimentum. </p>
+
+<button id="start">Start</button>
+<button id="stop">Stop</button><br><br>
+
+<div id="div1" style="width:80px;height:80px;display:none;background-color:red;"></div>
+
+
+</body>
+</html>
