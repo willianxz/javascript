@@ -1,0 +1,17 @@
+caminhos-relativos
+ - Serve para ensinar que se pode importar componentes com o caminho relativo ou seja você não vai mais precisar ficar usando ../../caminhoarquivo
+
+hello-react
+ - Contem o hello world utilizando bootstrap.
+
+navbar-navegacao-appshell-route 
+ - Serve para ensinar a navegação basica sem autenticação entre as telas e react-router-dom
+
+route-auth
+ - Exemplo bem basico ensinando a navegação basica com autenticação.
+
+simples-postagem
+ - Exemplo básico mostrando como funciona a interação entre os componentes, estado e props.
+
+rest-api-list-users
+ - Exemplo básico mostrando como fazer um componente fazer uma requisição get para uma api webserver, mostrando a lista de usuarios.

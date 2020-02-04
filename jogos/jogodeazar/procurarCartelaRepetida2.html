@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script>
+
+var cartelas = [1, 2, 3, 4, 5];
+
+
+var cartela1 = [5, 2, 9, 3, 1];
+var cartela2 = [8, 2, 5, 15, 20];
+var cartela3 = [4, 2, 5, 3, 1];
+
+var sorteadas = [];
+
+var encontrado = 0;
+
+sorteadas.push(cartela1);
+sorteadas.push(cartela2);
+sorteadas.push(cartela3);
+
+for(var x = 0; x < sorteadas.length; x++){
+  document.body.innerHTML += '</br></br>  Loop X: '+x+'</br></br>';  
+  for(var y = 0; y < cartelas.length; y++){
+    
+    for(var o = 0; o < cartelas.length; o++){
+        if(sorteadas[x][y] === cartelas[o]){
+           document.body.innerHTML += '</br>Foi encontrado o numero: '+cartelas[o]+' repetido!</br>';
+            encontrado++
+            
+            if(encontrado === cartelas.length){
+  				document.body.innerHTML += '</br> foi encontrado todos os '+cartelas.length+' numeros repetidos!</br>';
+                document.body.innerHTML += '</br> Destrua o objeto na posicao: '+x;
+                encontrado = 0;
+ 			 }
+           
+        }
+    }
+    
+  }
+  
+   if(encontrado > 0 && encontrado < cartelas.length){
+  				document.body.innerHTML += '</br> foi encontrado '+encontrado+'.</br>';               
+   }
+   
+  encontrado = 0;
+  document.body.innerHTML += '<hr/>';
+}
+
+
+
+</script>
+
+</body>
+</html> 
+
