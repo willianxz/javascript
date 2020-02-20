@@ -1,0 +1,62 @@
+<html>
+<head>
+
+<!-- Include stylesheet -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<!-- Include the Quill library -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+<style>
+#editor-container {
+  height: 375px;
+}
+</style>
+</head>
+<body >
+
+
+<!-- Create the editor container -->
+
+<div id="editor">
+	  <img style="" src="http://programandoagora.com/wp-content/uploads/2020/02/imagemlogot.png">
+	  <br>
+		<h1 style="text-align: center;">Give your team autonomy <br> while preserving the visual <br> identity of your company</h1>    
+		   <img  src="http://programandoagora.com/wp-content/uploads/2020/02/imagemprincipalt.png">			 
+	  <h2 style="text-align: center;"><br>www.tradetools.co</h2>  
+</div>
+
+
+<!-- Initialize Quill editor -->
+<script>  
+  
+  //Configuração do Editor
+  var quill = new Quill('#editor', {
+  modules: {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ['bold', 'italic', 'underline'],
+      ['image', 'code-block']
+    ]
+  },
+  placeholder: 'Compose an epic...',
+  theme: 'snow'  // or 'bubble'
+});
+
+//Eventos
+const ImageBlot = Quill.import('formats/image');
+const Parchment = Quill.import('parchment');
+quill.root.addEventListener('dblclick', (e) => {
+  const img = Parchment.find(e.target);
+  if (img instanceof ImageBlot) { //Verificamos se o que foi clicado é uma imagem.
+    //Se você colocar esse evento abaixo fora do IF,ao invés de ter que clicar em uma imagem para trocar, você poderá clicar em qualquer parte do editor 
+	//E colocar uma imagem.
+    document.querySelector(".ql-image").click(); 
+    quill.setSelection(img.offset(quill.scroll), 1, 'user');
+  }
+});
+
+</script>
+
+</body>
+</html>

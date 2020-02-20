@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- theme info -->
+  <meta name="description" content="This is web page used to demo functionality of the D3.js library. It is released under CC-4.0 license.">
+  <meta name="keywords" content="data visualization, d3, javascript, udacity">
+  <meta name="author" content="Chris Saden">
+  <!-- site title -->
+  <title>Udacity | Data Visualization and D3.js</title>
+  <script src="https://d3js.org/d3.v5.js"></script>
+</head>
+<body>
+
+<div class="main">
+ <svg width="600" height="300"></svg>
+</div>
+
+<script>
+  
+  //Selecione o SVG
+  var svg = d3.select('svg');  
+  
+  //Esse domain e range funciona igualmente ao map(); do p5.js ele apenas mapeia um valor de entrada
+  //Transformando em um valor de saida que se queira.
+
+  //O x sempre é scaleLog() 
+  //OBS: esse scaleLog, não funciona de 0 - 100 no domain, tem que fornecer um numero maior.
+  x = d3.scaleLog().domain([100, 1000]).range([0, 600]);  //Transforme a entrada de 0 - 100 em uma saida de 0 - 600
+
+ //O y sempre é scaleLinear()
+  y = d3.scaleLinear().domain([0, 100]).range([0, 300]); //Transforme a entrada de 0 - 100 em uma saida de 0 - 300
+
+ //O r sempre é scaleSqrt()
+  r = d3.scaleSqrt().domain([0, 100]).range([0, 100]); //Transforme a entrada de 0 - 100 em uma saida de 0 - 100
+
+  //Aqui fazemos nosso circulo roxo que terá como saida por conta do "map": x = 300, y = 150 e  r = 50
+  svg.append('circle').attr('fill', 'purple').attr('cx', x(300)).attr('cy', y(50)).attr('r', r(50));
+  
+  //Aqui coloco um circulo no meio, sem o uso do "map" ou seja, não mapeando nenhum valor.
+  svg.append('circle').attr('fill', 'yellow').attr('cx', 285).attr('cy', 150).attr('r', 25);
+
+</script>
+
+</body>
+</html>
