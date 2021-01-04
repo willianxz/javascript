@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <!-- Favi Icon ReactJs -->
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>relacionamento entre componente pai e filho</title>
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+     <div id="root"></div>
+
+    <!--JavaScript at end of body for optimized loading-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var elemsSideNav = document.querySelectorAll('.sidenav');
+        var instancesSideNav = M.Sidenav.init(elemsSideNav);
+
+        var elemsCarousel = document.querySelectorAll('.carousel');
+        var instancesCarousel = M.Carousel.init(elemsCarousel,{
+          fullWidth: false,
+          indicators: false,
+          noWrap: false
+        });
+
+        var elemsSlider = document.querySelectorAll('.slider');
+        var instancesSlider = M.Slider.init(elemsSlider);
+        
+
+        var elemsImagensMedia = document.querySelectorAll('.materialboxed');
+        var instancesImagensMedia = M.Materialbox.init(elemsImagensMedia);
+      });      
+
+      
+    </script>
+  </body>
+</html>
+      

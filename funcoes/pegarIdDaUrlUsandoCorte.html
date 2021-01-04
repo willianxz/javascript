@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>URL: http://localhost:3000/projects/edit/link1</p>
+
+<button onclick="myFunction()">GET ID</button>
+
+<p id="demo"></p>
+
+<script>
+function myFunction() {
+  var urlparametro = 'http://localhost:3000/projects/edit/link1'; //Nossa URL ficticia 
+  var posicaoletrafinaldelink = urlparametro.search("k"); //Procuramos pela posição da letra 'k'
+  var posicaocorretadecorte = posicaoletrafinaldelink + 1; //Queremos pegar apenas o que virá após a letra 'k'
+  var idprojeto =  urlparametro.slice(posicaocorretadecorte, urlparametro.length); //Pegamos apenas o numero.
+  document.getElementById("demo").innerHTML = idprojeto;
+}
+</script>
+
+</body>
+</html>

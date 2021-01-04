@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+ <center>
+  <h1>Que foto é essa???</h1>
+
+  <img id="minhaImagem" onmouseover="normalImg(this)"  onmouseout="filtrarImg(this)" border="0" src="https://www.maujor.com/imagens/frutas.png" alt="Smiley" 
+       width="400" height="300"
+       style="filter: brightness(0%)">
+
+  <p id="textoOculto" style="display: none;font-size: 20px">É uma foto de frutas!!!</p>
+</center>
+
+<script>
+	function normalImg(x) {
+	  x.style.filter = "brightness(100%)";
+	  document.getElementById("textoOculto").style.display = "block";
+	}
+
+	function filtrarImg(x) {
+	 x.style.filter = "brightness(0%)";
+	 document.getElementById("textoOculto").style.display = "none";
+	}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />   
+   <title>React App</title>
+   <script>
+    document.addEventListener('DOMContentLoaded', function (event) {
+
+              var elemsCarousel = document.querySelectorAll('.carousel');
+               M.Carousel.init(elemsCarousel,{
+                    fullWidth: false,
+                    indicators: false,
+                    noWrap: false
+              });
+             
+         
+             var elemsSideNav = document.querySelectorAll('.sidenav');
+              var instancesSideNav = M.Sidenav.init(elemsSideNav);
+              
+              var elemsSlider = document.querySelectorAll('.slider');
+              var instancesSlider = M.Slider.init(elemsSlider);                  
+
+              var elemsImagensMedia = document.querySelectorAll('.materialboxed');
+              var instancesImagensMedia = M.Materialbox.init(elemsImagensMedia);                        
+      });  
+</script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  </body>
+</html>

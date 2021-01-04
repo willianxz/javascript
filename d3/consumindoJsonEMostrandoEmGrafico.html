@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+
+    <script>
+
+        d3.json("dadosEmJson.json", function(data){
+
+         var svg = d3.select("body")
+                  .append("svg")
+                  .attr("width", 500)
+                  .attr("height", 500);
+
+
+          svg.selectAll("rect")
+               .data(data)
+               .enter()
+                  .append("rect")
+                  .attr("width", function(data){
+                    return(data.age * 10);
+                  })
+                  .attr("height", 48)
+                  .attr("y", function(data, i){
+                    return i * 50;
+                  })
+                  .attr("fill", "blue");
+
+
+         svg.selectAll("text")
+              .data(data)
+              .enter()
+                  .append("text")
+                  .attr("fill", "white")
+                  .attr("x", "5")
+                  .attr("y", function(data, i){
+                    return i * 50 + 24;
+                  })
+                  .text(function(data){
+                    return data.name;
+                  });
+
+      });
+    </script>
+</body>
+</html>

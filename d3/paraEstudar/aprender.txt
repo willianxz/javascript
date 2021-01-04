@@ -1,0 +1,4 @@
+Path
+Rotate
+Translate
+Aquele efeito de filtro de borrar a cor que tenho add no favoritos.

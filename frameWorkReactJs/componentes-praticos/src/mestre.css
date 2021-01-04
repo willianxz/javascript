@@ -1,0 +1,11 @@
+a:hover {
+    background-color: skyblue;
+}
+
+a:link{
+  text-decoration:none;
+}
+
+span{
+  padding: 5px;
+}

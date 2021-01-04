@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Mantendo os dados preenchidos</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+        
+        
+        <script>
+            //OBS: SESSÕES NORMAIS APENAS FICAM SALVA NO MESMO NAVEGADO, NÃO IMPORTANTO A QUANTIDADE DE ABAS ABERTAS.
+		 function criarinformacao(){ //Função para Criar informação de sessão
+			alert("Sessões ativadas");
+			sessionStorage.setItem("nome","iFro"); //Aqui é ativado as sessões
+			sessionStorage.setItem("polo","OuroPreto");
+		 
+                 
+		 }
+		 
+		 function mostrarinformacao(){//Função para Mostrar informação da sessão
+		  alert(sessionStorage.getItem("nome"));//Aqui mostra em um alerta o que tem na sessão.
+		 
+		 }
+    
+    
+        </script>
+        
+        
+        
+        
+        
+        
+        
+    </head>
+    <body>
+        
+       
+
+        <div class="w3-container w3-padding-top">
+
+        <button onclick="criarinformacao()" class="w3-btn w3-hover-cyan w3-xlarge w3-riple">criarinformacao</button>
+        <button onclick="mostrarinformacao()" class="w3-btn w3-hover-cyan w3-xlarge w3-riple">mostrarinformacao</button>
+       
+	</div>
+		
+     
+        
+    </body>
+</html>

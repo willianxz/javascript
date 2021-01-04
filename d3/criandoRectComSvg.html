@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+	<script>
+		var width = 500;
+		var height = 500;
+			
+		var svg = d3.select("body")
+					.append("svg")
+					.attr("width", width)
+					.attr("height", height);
+
+	    var rect1 = svg.append("rect")
+        	        .attr("x", 250)
+                    .attr("y", 50)
+                    .attr("width", 100)
+                    .attr("height", 100)
+                    .attr("fill", "yellow");
+                  
+       var rect2 = svg.append("rect")
+        	        .attr("x", 400)
+                    .attr("y", 50)
+                    .attr("width", 50)
+                    .attr("height", 100)
+                    .attr("fill", "purple");
+		
+       var rect3 = svg.append("rect")
+        	        .attr("x", 100)
+                    .attr("y", 50)
+                    .attr("width", 100)
+                    .attr("height", 120)
+                    .attr("fill", "green");
+      
+       var rect4 = svg.append("rect")
+        	        .attr("x", 250)
+                    .attr("y", 200)
+                    .attr("width", 50)
+                    .attr("height", 50)
+                    .attr("fill", "orange")
+                    .attr('stroke', 'black')
+                    .attr('stroke-width', 10);
+
+	
+	</script>
+</body>
+</html>

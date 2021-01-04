@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- theme info -->
+  <meta name="description" content="This is web page used to demo functionality of the D3.js library. It is released under CC-4.0 license.">
+  <meta name="keywords" content="data visualization, d3, javascript, udacity">
+  <meta name="author" content="Chris Saden">
+  <!-- site title -->
+  <title>Udacity | Data Visualization and D3.js</title>
+  <script src="https://d3js.org/d3.v5.js"></script>
+</head>
+<body>
+
+<div class="main">
+ <svg width="600" height="300">
+   <circle fill="blue" cx="250" cy="100" r="10" stroke="black"/>
+ </svg>
+</div>
+
+<script>
+
+  var svg = d3.select('svg');   //Selecione o SVG
+  
+  svg.append('circle').attr('fill', 'red') //Desenhe um circulo com a cor vermelha
+  .attr('cx', 300) // Com o x em 300
+  .attr('cy', 150) // Com o y em 150
+  .attr('r', 30); // Com o raio sendo 30
+
+
+  //Podemos também resumir o código fazendo ele desse modo inline:
+  svg.append('circle').attr('fill', 'purple').attr('cx', 300).attr('cy', 200).attr('r', 30).attr('stroke', 'yellow');
+  
+</script>
+
+</body>
+</html>

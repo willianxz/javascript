@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>JavaScript Arrays</h2>
+
+<p id="demo"></p>
+
+<script>
+ let response =  fetch('https://a-static.mlcdn.com.br/618x463/quadro-decorativo-paisagem-arvore-roxa-canvas-90x60-boa-ideia-decoracao/boaideiadecoracao/1493/ee8ee50e11e308d20131925f62b97219.jpg');
+  let data2 =  response;
+  let metadata = {
+    type: 'image/jpeg'
+  };
+  let file = new File([data2], "test.jpg", metadata);
+  
+  console.log(file);
+  
+</script>
+
+</body>
+</html>
+

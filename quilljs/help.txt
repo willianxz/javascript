@@ -1,0 +1,22 @@
+Site Oficial:https://quilljs.com/playground/#quill-playground
+
+SOBRE:
+O quillsjs é uma biblioteca em Javascript para incluir um editor online de textos em html, semelhante ao editor do Wordpress.
+
+
+OBS: Você não pode adicionar eventos de click de javascript em elementos html que estão dentro da div do editor. Para contornar isso existe dois modos para aplicar um evento ex1:
+
+quill.root.addEventListener('dblclick', (e) => {
+  const img = Parchment.find(e.target);
+  if (img instanceof ImageBlot) { //Verificamos se o que foi clicado é uma imagem.
+    //Se você colocar esse evento abaixo fora do IF,ao invés de ter que clicar em uma imagem para trocar, você poderá clicar em qualquer parte do editor 
+	//E colocar uma imagem.
+    document.querySelector(".ql-image").click(); 
+    quill.setSelection(img.offset(quill.scroll), 1, 'user');
+  }
+});
+
+
+ex2:
+Você pode colocar qualquer evento em um elemento html fóra da div do editor, um botão por exemplo e a partir desse ponto fazer algo.
+

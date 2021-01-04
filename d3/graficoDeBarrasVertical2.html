@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<meta charset='utf-8'>
+<style> /* CSS styling */
+
+  body {
+      font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+      font-size: 14px;
+  }
+
+  .bar {
+    border: 1px solid #0b3536;
+    border-radius: 6px;
+    fill: #0098d8;
+  }
+
+  #viz .barText {
+    fill: #f5faf8;
+    font-weight: 500;
+  }
+
+  .axisY text, .axisX text, .headerText text{
+    fill: #0b3536;
+  }
+
+  #viz svg {
+    background-color: #f5faf8;
+  }
+
+</style>
+<head>
+  <title>Simple Bar Chart</title>
+</head>
+<body>
+  <div class='container'>
+    <div id='viz'></div>
+  </div>
+<script src='https://d3js.org/d3.v4.min.js'></script>
+<script>
+
+// Given sample data
+var someData = [ {key: 'W1', value: 32},
+                 {key: 'W2', value: 26},
+                 {key: 'W3', value: 45},
+                 {key: 'W4', value: 38},
+                 {key: 'W5', value: 53},
+                 {key: 'W6', value: 48},
+                 {key: 'W7', value: 42},
+                 {key: 'W8', value: 34},
+                 {key: 'W9', value: 37},
+                 {key: 'W10', value: 36},
+];
+
+// Creating new arrays from the data, separating weeks from the numbers
+var weeks  = someData.map(function(d){ return d.key; });
+var values = someData.map(function(d){ return d.value; });
+
+// Setting the margin and dimensions of the work area
+var margin = {top: 50, right: 20, bottom: 30, left: 30},
+    width = 760 - margin.left - margin.right,
+    height = 380 - margin.top - margin.bottom;
+
+// Creating the scale variables and setting the ranges
+var xScale = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+    yScale = d3.scaleLinear().rangeRound([height, 0]);
+
+// Adjusting data by assigning domain to the range of the scale
+xScale.domain(weeks);
+yScale.domain([0, d3.max(values)]);
+
+// Appending the svg object to the div on the page
+var svg = d3.select('#viz').append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom);
+
+// Appending the 'group' element to the svg
+// Moving the 'group' element to the top left margin
+var g = svg.append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+// Adding header to the chart
+g.attr('class', 'headerText')
+   .append('text')
+   .attr('transform', 'translate(' + (width / 2) + ',' + (-margin.top / 2) + ')')
+   .attr('text-anchor', 'middle')
+   .attr('font-weight', 600)
+   .text('Simple Bar Chart');
+
+// Appending X axis and formatting the text
+g.append('g')
+    .attr('class', 'axisX')
+    .attr('transform', 'translate(0,' + height + ')')
+    .call(d3.axisBottom(xScale))
+    .attr('font-weight', 'bold');
+
+// Appending Y axis
+g.append('g')
+    .attr('class', 'axisY')
+    .call(d3.axisLeft(yScale).ticks(10));
+
+// Creating chart
+var chart = g.selectAll('bar')
+    .data(someData)
+    .enter().append('g')
+
+// Appending bar chart to the chart
+chart.append('rect')
+    .attr('class', 'bar')
+    .attr('x', function(d) { return xScale(d.key); })
+    .attr('height', function(d) { return height - yScale(d.value); })
+    .attr('y', function(d) { return yScale(d.value); })
+    .attr('width', xScale.bandwidth());
+
+// Appending text to each bar chart
+chart.append('text')
+    .attr('class', 'barText')
+    .attr('x', function(d) { return xScale(d.key); })
+    .attr('y', function(d) { return yScale(d.value); })
+    .attr('dx', xScale.bandwidth()/2)
+    .attr('dy', 20)
+    .attr('text-anchor', 'middle')
+    .text(function(d){ return d.value; });
+
+// Adding mouseover and mouseout functions to the chart
+chart.on('mouseover', function(d){
+      d3.select(this).attr('opacity', 0.7);
+      })
+    .on('mouseout', function(d){
+      d3.select(this)
+        .attr('opacity', 1)});
+
+</script>
+</body>

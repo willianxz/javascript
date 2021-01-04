@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.13.1/lodash.js'></script>
+  
+  <style>
+    svg {
+      width: 900px;
+      height: 10000px;
+    }
+    
+    /* blend options taken from visual cinnamon tutorial: http://www.visualcinnamon.com/2016/05/beautiful-color-blending-svg-d3.html */
+    /*Set isolate on the group element*/
+    .flower { isolation: isolate; }  
+    /*Set blend mode on SVG element: e.g. screen, multiply*/
+    .flower circle { mix-blend-mode: multiply; }
+  </style>
+</head>
+
+<body>
+  <svg>
+  </svg>
+  <script>
+    var padding = 20;
+    var svg = d3.select('svg')
+    	.append('g')
+    	.attr('transform', 'translate(' + [padding, padding] + ')');
+    var flowerSize = 150;
+		var petalPaths = [[
+    	'M0,0',
+      "C50,50 50,100 0,100",
+      "C-50,100 -50,50 0,0"
+    ],
+    [
+			'M-35,0',
+      'C-25,25 25,25 35,0',
+      'C50,25 25,75 0,100',
+      'C-25,75 -50,25 -35,0'
+    ],
+    [
+      'M0,0',
+      'C50,40 50,70 20,100',
+      'L0,85',
+      'L-20,100',
+      'C-50,70 -50,40 0,0'
+    ],
+    [
+      'M0,0',
+      'C50,25 50,75 0,100',
+      'C-50,75 -50,25 0,0'
+    ]];
+    
+    var numPetalScale = d3.scaleQuantize()
+    	.range(_.range(5, 15));
+    var flowerSizeScale = d3.scaleLinear()
+    	.range([.05, .5]);
+    var petalScale = d3.scaleOrdinal()
+    	.range(_.range(4));
+    var petalColors = d3.scaleOrdinal()
+    	.range(['#FFC8F0', '#CBF2BD', '#AFE9FF', '#AFE9FF', '#FFF2B4']);
+//     	.range(['#FF7453', '#F45492', '#3DCF45', '#0D9EE4', '#FFED4F']);
+    
+    // blur effect taken from visualcinnamon:
+    // http://www.visualcinnamon.com/2016/05/real-life-motion-effects-d3-visualization.html
+    var defs = svg.append("defs");
+    defs.append("filter")
+      .attr("id", "motionFilter") 	//Give it a unique ID
+      .attr("width", "300%")		//Increase the width of the filter region to remove blur "boundary"
+      .attr("x", "-100%") 			//Make sure the center of the "width" lies in the middle of the element
+      .append("feGaussianBlur")	//Append a filter technique
+      .attr("in", "SourceGraphic")	//Perform the blur on the applied element
+      .attr("stdDeviation", "8 8");	//Do a blur of 8 standard deviations in the horizontal and vertical direction
+
+    
+    d3.json('movies.json', function(movies) {
+      movies = _.chain(movies)
+      	.map(function(movie) {
+        	movie.year = parseInt(movie.Year);
+          movie.genres = movie.Genre.split(', ');
+          movie.rating = parseFloat(movie.imdbRating);
+          movie.votes = parseInt(movie.imdbVotes.replace(',', ''));
+
+          return movie;
+        }).sortBy(function(movie) {
+        	return -movie.year
+        }).value();
+      
+      // number of petals depending on number of rating votes
+      var minVotes = d3.min(movies, function(d) {return d.votes});
+      var maxVotes = d3.max(movies, function(d) {return d.votes});
+      numPetalScale.domain([minVotes, maxVotes]);
+      // overall flower size from rating
+      var minRating = d3.min(movies, function(d) {return d.rating});
+      var maxRating = d3.max(movies, function(d) {return d.rating});
+      flowerSizeScale.domain([minRating, maxRating]);
+      // get the top 4 genres by count
+      var topGenres = _.chain(movies)
+      	.map('genres').flatten()
+      	.countBy().toPairs()
+      	.sortBy(1).map(0)
+      	.takeRight(4)
+      	.value();
+      topGenres.push('Other');
+      petalColors.domain(topGenres);
+      
+      // draw flower for each movie
+      var flowers = svg.selectAll('g.flower')
+        .data(_.values(movies)).enter().append('g')
+        .classed('flower', true)
+        .attr('transform', function(d, i) {
+          var scale = flowerSizeScale(d.rating);
+          var x = (i % 6) * flowerSize;
+          var y = Math.floor(i / 6) * flowerSize;
+          return 'translate(' + x + ',' + y +
+            ')scale(' + scale + ')';
+        });
+      
+      // create the data for each flower's colors
+      flowers.selectAll('circle')
+      	.data(function(d) {
+        	// if there's only one genre, center the circle
+        	var cy = d.genres.length === 1 ? 0 : -flowerSize / 5;
+        	return _.map(d.genres, function(genre, i) {
+            genre = _.includes(topGenres, genre) ? genre : 'Other';
+            return {
+              cy: cy,
+              scale: flowerSizeScale(d.rating),
+              angle: (360/d.genres.length) * i,
+              fill: petalColors(genre)
+            }
+          });
+        }).enter().append('circle')
+      	.attr('cy', function(d) {return d.cy})
+        .attr('r', flowerSize / 2)
+      	.attr('fill', function(d) {return d.fill})
+      	.attr('transform', function(d) {
+          var x = flowerSize / 2 / d.scale;
+          var y = flowerSize / 2 / d.scale;
+          return 'translate(' + [x, y] +
+            ')rotate(' + d.angle + ')';
+        }).style("filter", "url(#motionFilter)");
+      
+      flowers.selectAll('path')
+        .data(function(d) {
+        	var numPetals = numPetalScale(d.votes);
+        	var path = petalPaths[petalScale(d.Rated)];
+          return _.times(numPetals, function(i) {
+            return {
+              scale: flowerSizeScale(d.rating),
+              angle: (360/numPetals) * i,
+              path: path
+            }
+          });
+        }).enter().append('path')
+        .attr('stroke', '#444')
+        .attr('stroke-width', function(d) {
+        	return 2 / d.scale;
+        }).attr('fill', 'none')
+        .attr('d', function(d) {return d.path})
+        .attr('transform', function(d) {
+          var cx = flowerSize / 2 / d.scale;
+          var cy = flowerSize / 2 / d.scale;
+          return 'translate(' + [cx, cy] +
+            ')rotate(' + [d.angle] + ')';
+        });
+    });
+    
+  </script>
+</body>

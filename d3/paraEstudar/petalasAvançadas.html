@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.13.1/lodash.js'></script>
+  
+  <style>
+    svg {
+      width: 900px;
+      height: 900px;
+    }
+  </style>
+</head>
+
+<body>
+  <svg>
+  </svg>
+  <script>
+    var padding = 20;
+    var svg = d3.select('svg')
+    	.append('g')
+    	.attr('transform', 'translate(' + [padding, padding] + ')');
+    
+    var flowerSize = 300;
+    var numPetals = 6;
+		var petalPaths = [[
+    	'M0,0',
+      "C50,50 50,100 0,100",
+      "C-50,100 -50,50 0,0"
+    ],
+    [
+			'M-35,0',
+      'C-25,25 25,25 35,0',
+      'C50,25 25,75 0,100',
+      'C-25,75 -50,25 -35,0'
+    ],
+    [
+      'M0,0',
+      'C50,40 50,70 20,100',
+      'L0,85',
+      'L-20,100',
+      'C-50,70 -50,40 0,0'
+    ],
+    [
+      'M0,0',
+      'C50,25 50,75 0,100',
+      'C-50,75 -50,25 0,0'
+    ]];
+    
+    var flowers = svg.selectAll('g.flower')
+    	.data(petalPaths).enter().append('g')
+    	.classed('flower', true)
+    	.attr('transform', function(d, i) {
+      	var x = (i % 2) * flowerSize;
+      	var y = Math.floor(i / 2) * flowerSize;
+      	return 'translate(' + x + ',' + y + ')';
+      });
+    
+    flowers.selectAll('path')
+    	.data(function(d) {
+      	// for each flower, draw the petal 6 times
+      	return _.times(numPetals, function(i) {
+          return {
+            angle: (360/numPetals) * i,
+            d: d
+          }
+        });
+      }).enter().append('path')
+    	.attr('stroke', '#000')
+    	.attr('stroke-width', 2)
+    	.attr('fill', 'none')
+    	.attr('d', function(d) {return d.d})
+    	.attr('transform', function(d) {
+      	var cx = flowerSize / 2;
+      	var cy = flowerSize / 2;
+      	return 'translate(' + [cx, cy] +
+          ')rotate(' + [d.angle] + ')';
+      });
+  </script>
+</body>

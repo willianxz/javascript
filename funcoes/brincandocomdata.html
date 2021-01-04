@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>JavaScript new Date()</h2>
+
+<p>new Date() creates a new date object with the current date and time:</p>
+
+<p id="demo"></p>
+
+<script>
+//01-01-2020
+var data = new Date();
+console.log(data.toLocaleDateString());
+
+
+//2020-01-01
+var data2 = new Date()
+var dia = data2.getDate();
+var mes = data2.getMonth();
+if(mes < 10){
+  mes = '0'+mes;
+}
+var ano = data2.getFullYear();
+data2 = ano  + '-' + mes + '-' + dia;
+console.log(data2);
+
+
+//2020-01-01
+var data3 = new Date();
+//Se for final de semana, irá imprimir true, caso contrario será false.
+console.log(data3.getDay() == 0 || data3.getDay() == 6 ? true : false);
+data3 = data3.toLocaleDateString();
+data3 = data3.split('/').reverse().join('-');
+console.log(data3);
+
+
+</script>
+
+</body>
+</html>

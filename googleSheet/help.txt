@@ -1,0 +1,1 @@
+Lá na planilha online do Google Sheets, para fazer com que uma função seja executada quando a planilha se abrir, deve ser necessario criar uma função lá no código chamada onOpen(e) e depois disso adicionar um acionador clicando na aba Editar, acionadores do projeto atual e adicionar um acionador para quando iniciar a planilha, selecionando a função onOpen(e)

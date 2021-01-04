@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		
+		<!-- D3.js -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+
+		<!-- Google fonts -->
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400' rel='stylesheet' type='text/css'>
+		
+		<style>
+			body {
+				text-align: center;
+				font-family: 'Open Sans', sans-serif;
+				font-weight: 400;
+			}
+
+			.title {
+			    font-size: 24px;
+			    fill: #4F4F4F;
+			    font-weight: 300;
+			    text-anchor: middle;
+			}
+
+			#explanation {
+				font-size: 12px;
+				color: #737373;
+			}
+		</style>
+
+	</head>	
+	<body>
+
+		<div id="movingCircles"></div>
+		<div id="explanation">Click anywhere to turn on/off the motion blur filter</div>
+
+		<script language="javascript" type="text/javascript">
+
+			///////////////////////////////////////////////////////////////////////////
+			//////////////////// Set up and initiate svg containers ///////////////////
+			///////////////////////////////////////////////////////////////////////////	
+
+			var margin = {
+				top: 50,
+				right: 50,
+				bottom: 20,
+				left: 50
+			};
+			var width = document.getElementById('movingCircles').offsetWidth - margin.left - margin.right - 10,
+				height = 400;
+						
+			//SVG container
+			var svg = d3.select('#movingCircles')
+				.append("svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.on("click", switchBlur)
+				.append("g")
+				.attr("transform", "translate(" + (margin.left + width/2) + "," + (margin.top + height/2) + ")");
+
+			var color = "#F92672";
+
+			//Title on top
+		    svg.append("text")
+		    	.attr("class", "title")
+		        .attr("x", 0)
+		        .attr("y", -height/2 - 20)
+		        .style("text-anchor", "middle")
+		        .text("With motion blur filter");
+
+			///////////////////////////////////////////////////////////////////////////
+			//////////////////// Switch between blur and no blur //////////////////////
+			///////////////////////////////////////////////////////////////////////////	
+
+			//Switch between blur filter and no filter on click
+			var blurOn = true;
+			function switchBlur() {
+
+				//Change title
+				d3.selectAll(".title")
+	        		.text(blurOn ? "Without motion blur filter" : "With motion blur filter");
+
+				d3.selectAll(".flyCircle")
+					.style("filter", function(d,i) { return blurOn ? "none" : "url(#motionBlurFilter-"+i+")"; });
+
+				blurOn = blurOn ? false : true;
+			}//switchBlur
+
+			///////////////////////////////////////////////////////////////////////////
+			//////////////////////////////// Create Data //////////////////////////////
+			///////////////////////////////////////////////////////////////////////////	
+
+			//Create the circles that will move out and in the center circle
+			var steps = 15;
+			var flyCircleData = [];
+			for (var i = 0; i < steps; i++) {
+				flyCircleData.push({ 
+					id: i,
+					fixedAngle: (i/steps)*(2*Math.PI)+0.01
+				})
+			}//for i
+
+			///////////////////////////////////////////////////////////////////////////
+			//////////////////////////// Create fuzzy filter //////////////////////////
+			///////////////////////////////////////////////////////////////////////////	
+
+			//SVG filter for the fuzzy effect
+			//Code based on http://tympanus.net/codrops/2015/04/08/motion-blur-effect-svg/
+			var defs = svg.append("defs");
+
+			//Create a filter per circle so we can adjust the fuzzyness per circle that is flying out
+			defs.selectAll(".flyCircleFilters")
+				.data(flyCircleData)
+				.enter().append("filter")
+				.attr("class", "flyCircleFilters")
+				.attr("id",function(d,i) { return "motionBlurFilter-"+i; })
+				.attr("width", "300%")	//increase the width of the filter region to remove blur "boundary"
+				.attr("x", "-100%") //make sure the center of the "width" lies in the middle
+				.attr("height", "200%")
+				.attr("y", "-50%")
+				.attr("color-interpolation-filters","sRGB") //to fix safari: http://stackoverflow.com/questions/24295043/svg-gaussian-blur-in-safari-unexpectedly-lightens-image
+				.append("feGaussianBlur")
+				.attr("class", "blurValues")
+				.attr("in","SourceGraphic")
+				.attr("stdDeviation","0,0");
+
+			///////////////////////////////////////////////////////////////////////////
+			//////////////////////// Create fly out circles ///////////////////////////
+			///////////////////////////////////////////////////////////////////////////	
+
+			var circleWrapper = svg.append("g")
+				.attr("class", "circleWrapper");
+
+			//Since we can only do a blur in the x and y direction the group should be rotated
+			//so the coordinated system turns along with the direction the circle
+			//will be flying out from
+			var flyCircles = circleWrapper.selectAll(".flyCircle")
+				.data(flyCircleData)
+				.enter().append("circle")
+				.attr("class", "flyCircle")
+				.attr("transform", function(d,i) { return "rotate(" + (d.fixedAngle*180/Math.PI - 90) + ")"; })
+				.attr("cx", 0)
+				.attr("cy", 0)
+				.attr("r", 12)
+				.style("fill", color)
+				.style("filter", function(d,i) { return "url(#motionBlurFilter-"+i+")"; });
+
+			//Append circle at center
+			circleWrapper.append("circle")
+					.attr("class", "centerCircle")
+					.attr("cx", 0)
+					.attr("cy", 0)
+					.attr("r", 25)
+					.style("fill", color);
+
+			repeat();
+
+			///////////////////////////////////////////////////////////////////////////
+			/////////////////////// Move in and out function //////////////////////////
+			///////////////////////////////////////////////////////////////////////////	
+
+			//Continuously moves the circles outward and inward	
+			function repeat() {
+
+				var dur = 1000,
+					del = 500;	
+				
+				//Interpolate the fuzzyness
+				d3.selectAll(".blurValues")
+					.transition().duration(dur*0.1)
+					.delay(function(d,i) { return i*del; })
+					.attrTween("stdDeviation", function() { return d3.interpolateString("0 0", "9 0"); })
+				  .transition().duration(dur*0.2)
+				  .attrTween("stdDeviation", function() { return d3.interpolateString("9 0", "0 0"); })
+					.transition().duration(dur*0.4) //Another one for the circles moving back in
+					.delay(function(d,i) { return steps*del + i*del; })
+					.attrTween("stdDeviation", function() { return d3.interpolateString("0 0", "9 0"); })
+				  .transition().duration(dur*0.3)
+				  .attrTween("stdDeviation", function() { return d3.interpolateString("9 0", "0 0"); });
+
+				//Move circles in an out
+				d3.selectAll(".flyCircle")
+					.transition("flyOut").duration(dur)
+					.delay(function(d,i) { return d.id*del; })
+					.ease("elastic")
+					.attr("cx", height/2*0.8 )
+					.transition("flyIn").duration(dur/3)
+					.delay(function(d,i) { return steps*del + d.id*del; })
+					.ease("exp")
+					.attr("cx", 0)
+					.call(endall, repeat);
+
+			}//repeat
+
+			//Function to only run once after the last transition ends
+			function endall(transition, callback) { 
+				var n = 0; 
+				transition 
+					.each(function() { ++n; }) 
+					.each("end", function() { if (!--n) callback.apply(this, arguments); }); 
+			}//endall
+
+		</script>
+
+	</body>
+</html>

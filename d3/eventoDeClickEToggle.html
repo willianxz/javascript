@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+  
+<body>
+	<script>
+		var width = 500;
+		var height = 500;
+
+		//Cria o elemento de SVG
+		var svg = d3.select("body")
+					.append("svg")
+					.attr("width", width)
+					.attr("height", height);
+			
+		//Cria um elemento texto sem nada
+		var g = svg.append("g")
+				   .attr("transform", function(d, i) {
+							return "translate(0,0)";
+				   });
+      
+      
+
+		//Cria uma ellipse
+		var ellipse = g.append("ellipse")
+					   .attr("cx", 250)
+					   .attr("cy", 50)
+					   .attr("rx", 150)
+					   .attr("ry", 50)
+        				 .on('click', function(){
+                           var colorEllipse = d3.select(this).style('fill');
+                          
+                           if(colorEllipse === "black" || colorEllipse === "rgb(0, 0, 0)"){
+                             d3.select(this).style('fill', 'red');
+                           }else{
+                              d3.select(this).style('fill', 'black');
+                           }
+                           console.log(d3.event);
+                           console.log(d3.mouse(this));//Emite a posição do mouse onde foi clicado.                           
+                       });
+        			    
+               //Criamos o texto após a ellipse, pois se não, 
+                //o texto não iria aparecer por cima da mesma
+                  g.append("text")
+                   .attr("x", 150)
+                   .attr("y", 50)
+                   .attr("stroke", "#fff")
+                   .text("Clique na Ellipse!");
+		
+         
+	</script>
+</body>
+</html>

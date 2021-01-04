@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+
+    <h3>Error: This is error.</h3>
+    <h3>Warning:This is warning.</h3>
+    <h3>Sucess:This is sucess.</h3>
+
+<script>
+    //Para cada Paragrafo encontrado, execute a função de callback e aplique uma cor.
+    d3.selectAll("h3").style("color", function(d, i) {
+            var text = this.innerText; //Armazene o texto
+        
+            if (text.indexOf("Error") >= 0) { //Se o texto conter a palavra Error
+                return "red"; //Aplique a cor vermelha
+            } else if (text.indexOf("Warning") >= 0) { //Se o texto conter a palavra Warning
+                return "yellow"; //Aplique a cor amarela
+            }else if (text.indexOf("Sucess") >= 0) { //Se o texto conter a palavra Sucess
+                return "green"; //Aplique a cor verde
+            }
+    });
+</script>
+</body>
+</html>

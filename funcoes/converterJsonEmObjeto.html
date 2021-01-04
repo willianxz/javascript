@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Create JSON string from a JavaScript object.</h2>
+
+<p id="demo"></p>
+
+<script>
+var obj = {
+    "Global Quote": {
+        "01. symbol": "BMGB4.SAO",
+        "02. open": "4.4600",
+        "03. high": "4.6700",
+        "04. low": "4.3000",
+        "05. price": "4.4800",
+        "06. volume": "969900",
+        "07. latest trading day": "2020-04-09",
+        "08. previous close": "4.4000",
+        "09. change": "0.0800",
+        "10. change percent": "1.8182%"
+    }
+};
+var myJSON = JSON.stringify(obj);
+console.log(myJSON);
+myJSON = JSON.parse(myJSON);
+console.log(myJSON);
+console.log(myJSON["Global Quote"]);
+console.log(myJSON["Global Quote"]["05. price"]);
+
+console.log(typeof(myJSON));
+var test = Object.values(myJSON);
+console.log(test[0]["05. price"]);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,139 @@
+
+INSTALAÇÕES RAPIDAS:
+
+Criar aplicação do zero:
+npx create-react-app my-app
+cd my-app
+npm start
+
+Bootstrap e ReactStrap:
+npm install --save bootstrap
+npm install --save reactstrap react react-dom
+
+Materialize Css:
+npm install --save materialize-css
+
+Dê um import dessa forma em seu arquivo index.js:
+import "materialize-css/dist/css/materialize.min.css";
+
+
+
+No arquivo index.html:
+
+Coloque esse código dentro do <head> para importar os icones do materialize:
+ <!--Import Google Icon Font-->
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+ 
+No componente que você quiser usar alguma classe do Materialize que contenha javascript dele, você deve importar o materialize dessa forma:
+import  Materializejs from "../../node_modules/materialize-css/dist/js/materialize.min.js";
+
+Feito isso, coloque no componentDidMount() o script em JS que inicie o JS do materialize exemplo:
+
+componentDidMount(){
+//Serve para ativar o JS do materialize que envolve a classe.
+        var elemsImagensMedia = document.querySelectorAll('.materialboxed');
+        Materializejs.Materialbox.init(elemsImagensMedia); 
+    }
+
+
+
+
+Router Dom:
+npm install --save react-router-dom
+
+
+
+componentes-praticos
+ - Serve como deposito de componentes reutilizaveis que podem ser aplicados para diversas situações, como clock ou outras funções.
+
+caminhos-relativos
+ - Serve para ensinar que se pode importar componentes com o caminho relativo ou seja você não vai mais precisar ficar usando ../../caminhoarquivo
+
+hello-react
+ - Contem o hello world utilizando bootstrap.
+
+navbar-navegacao-appshell-route 
+ - Serve para ensinar a navegação basica sem autenticação entre as telas e 
+- Instale o: 
+react-router-dom
+reactstrap
+
+
+route-auth
+ - Exemplo bem basico ensinando a navegação basica com autenticação.
+
+simples-postagem
+ - Exemplo básico mostrando como funciona a interação entre os componentes, estado e props.
+
+rest-api-list-users
+ - Exemplo básico mostrando como fazer um componente fazer uma requisição get para uma api webserver, mostrando a lista de usuarios.
+
+
+
+OBS:
+
+No AppShell e no Header a variavel this.props.location.pathname não existe, apenas nos componentes que são chamados pelo Switch.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Á um exemplo importante no projeto smarth-commerce, que mostra que um componente pai deve informar para o filho os eventos que o pai quer ouvir e o pai o controla como deve se executado o evento.
+QuantityBlockedValue(Componente Pai)
+SnippetInput(Componente Filho)
+
+Lembrar de sempre se perguntar, se você quer mudar o determinado valor enviado, se sim, então deve ser necessario criar um state para receber o props, se não, use diretamente o props recebido.
+
+Se você também quiser que o valor seja acessivel por todo o escopo é recomendavel o state, com a segurança de que terá realmente algum valor, por receber no construtor verificando se o props veio realmente algum valor, ao invés de usar o props diretamente onde pode não ser enviado o valor.
+
+
+Acessar um item de uma lista de objetos:
+ this.state.listobjsproduct.map((product) => {
+     console.log(product.producttitle);
+ });
+
+
+Sempre quando der o problema de Chunk no css/js na hora de subir o projeto de react.
+Verifique se no arquivo do package.json tem o atributo homepage setado.
+Por exemplo:
+ "version": "0.1.0",
+  "homepage": "http://programandoagora.com/componentepairelacionadocomfilho",
+
+
+
+
+
+
+
+
+
+----------- NEXTJS -----------
+
+Inicie o projeto em alguma pasta vazia e execute o cmd:
+
+npm init -y  (para criar o package.json)
+npm install next
+npm install react
+npm install react-dom
+Ou da para usar apenas:
+npm install next react react-dom
+No package.json na parte em "scripts" substitua "test" por "dev": "next dev"
+
+
+Criar uma pasta pages com um arquivo index.js
+
+Pra rodar o código só executar no cmd:
+npm run dev
+Se você usar esse comando sem ter a pasta pages, ele irá reclamar.
+
+O bom do Next é que não precisa ficar mechendo em rotas.

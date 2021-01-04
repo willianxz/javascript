@@ -1,0 +1,35 @@
+a:hover {
+    background-color: skyblue;
+}
+
+a:link{
+  text-decoration:none;
+}
+
+span{
+  padding: 5px;
+}
+
+a:link{
+  margin: 20px;
+}
+
+
+.noTextSelect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+
+/* Alguns ajustes no Materialize Css*/
+i.medium {
+  font-size: 4rem !important;
+}
+
+
+

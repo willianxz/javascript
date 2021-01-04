@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.13.1/lodash.js'></script>
+  
+  <style>
+    svg {
+      width: 1200px;
+      height: 10000px;
+    }
+  </style>
+</head>
+
+<body>
+  <svg>
+  </svg>
+  <script>
+    var padding = 20;
+    var svg = d3.select('svg')
+    	.append('g')
+    	.attr('transform', 'translate(' + [padding, padding] + ')');
+    var flowerSize = 150;
+		var petalPaths = [[
+    	'M0,0',
+      "C50,50 50,100 0,100",
+      "C-50,100 -50,50 0,0"
+    ],
+    [
+			'M-35,0',
+      'C-25,25 25,25 35,0',
+      'C50,25 25,75 0,100',
+      'C-25,75 -50,25 -35,0'
+    ],
+    [
+      'M0,0',
+      'C50,40 50,70 20,100',
+      'L0,85',
+      'L-20,100',
+      'C-50,70 -50,40 0,0'
+    ],
+    [
+      'M0,0',
+      'C50,25 50,75 0,100',
+      'C-50,75 -50,25 0,0'
+    ]];
+    
+    var numPetalScale = d3.scaleQuantize()
+    	.range(_.range(5, 15));
+    var flowerSizeScale = d3.scaleLinear()
+    	.range([.05, .5]);
+    var petalScale = d3.scaleOrdinal()
+    	.range(_.range(4));
+    
+    d3.json('movies.json', function(movies) {
+      movies = _.map(movies, function(movie) {
+        movie.genres = movie.Genre.split(', ');
+        movie.rating = parseFloat(movie.imdbRating);
+        movie.votes = parseInt(movie.imdbVotes.replace(',', ''));
+        
+        return movie;
+      });
+      
+      var minVotes = d3.min(movies, function(d) {return d.votes});
+      var maxVotes = d3.max(movies, function(d) {return d.votes});
+      numPetalScale.domain([minVotes, maxVotes]);
+      
+      var minRating = d3.min(movies, function(d) {return d.rating});
+      var maxRating = d3.max(movies, function(d) {return d.rating});
+      flowerSizeScale.domain([minRating, maxRating]);
+      
+      // draw flower for each movie
+      var flowers = svg.selectAll('g.flower')
+        .data(_.values(movies)).enter().append('g')
+        .classed('flower', true)
+        .attr('transform', function(d, i) {
+          var x = (i % 5) * flowerSize;
+          var y = Math.floor(i / 5) * flowerSize;
+          var scale = flowerSizeScale(d.rating);
+          return 'translate(' + x + ',' + y +
+            ')scale(' + scale + ')';
+        });
+     
+      flowers.selectAll('path')
+        .data(function(d) {
+        	var numPetals = numPetalScale(d.votes);
+//         	console.log(d.votes, numPetals);
+        	var path = petalPaths[petalScale(d.Rated)];
+          return _.times(numPetals, function(i) {
+            return {
+              angle: (360/numPetals) * i,
+              path: path
+            }
+          });
+        }).enter().append('path')
+        .attr('stroke', '#000')
+        .attr('stroke-width', 2)
+        .attr('fill', 'none')
+        .attr('d', function(d) {return d.path})
+        .attr('transform', function(d) {
+          var cx = flowerSize / 2;
+          var cy = flowerSize / 2;
+          return 'translate(' + [cx, cy] +
+            ')rotate(' + [d.angle] + ')';
+        });
+    });
+    
+  </script>
+</body>

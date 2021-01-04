@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+  
+    <script>
+        var dadosNumericos = [5, 20, 30, 40];
+        var dadosString = ["2000", "2005", "2010", "2020"];
+      
+        var width = 600;
+        var height = 500;
+      
+        var dadoComNumericosValorMinimo = d3.min(dadosNumericos);
+        var dadoComNumericosValorMaximo = d3.max(dadosNumericos);
+      
+        //Aqui convertemos os valores dos dados em um alcance de 0 - width do SVG
+        var widthScale = d3.scaleLinear()
+                         .domain([dadoComNumericosValorMinimo, dadoComNumericosValorMaximo])
+                         .range([0, width]);
+        
+        var heightScale = d3.scaleLinear()
+                         .domain(["2000", "2020"])
+                         .range([0, height]);
+        
+
+         //Definimos o axis, que é uma linha e passamos os nossos dados mapeados em relação ao SVG para ele.
+        var axisBottom = d3.axisTop(widthScale);
+
+        var axisLeft = d3.axisLeft(heightScale);
+        
+         var svg = d3.select("body").append("svg")
+                      .attr("width", width)
+          			      .attr("height", height)
+                      .append("g")
+                      .attr("transform", "translate(50, 0)")  //Isso apenas da uma margem para o gráfico SVG.
+              
+        //Criamos um grupamento g e chamamos o axis, usando translate jogamos ele para baixo do gráfico de barras.           
+        svg.append("g")
+          .attr("transform", "translate(0, 400)")
+          .call(axisBottom);
+      
+        svg.append("g")
+          .attr("transform", "translate(20, 0)")
+          .call(axisLeft);
+        
+
+    </script>
+</body>
+</html>
