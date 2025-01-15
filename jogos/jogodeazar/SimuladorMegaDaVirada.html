@@ -1,0 +1,214 @@
+<html><head><base href="." />
+<title>Simulador Mega da Virada</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        backdrop-filter: blur(4px);
+        width: 100%;
+        max-width: 600px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #FFD700;
+        margin-bottom: 30px;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.9);
+        margin-bottom: 10px;
+    }
+
+    button {
+        width: 100%;
+        padding: 15px;
+        background: #FFD700;
+        border: none;
+        border-radius: 5px;
+        color: #1e3c72;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    button:hover {
+        background: #FFC900;
+        transform: scale(1.02);
+    }
+
+    #resultado {
+        margin-top: 20px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        display: none;
+    }
+
+    .loading {
+        display: none;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .spinner {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #FFD700;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .error {
+        color: #FF6B6B;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simulador Mega da Virada</h1>
+        
+        <div class="input-group">
+            <label>Digite os 6 números da sua aposta (separados por vírgula):</label>
+            <input type="text" id="numerosAposta" placeholder="Ex: 1,2,3,4,5,6">
+            <div id="errorNumeros" class="error"></div>
+        </div>
+
+        <div class="input-group">
+            <label>Valor de cada cartela (R$):</label>
+            <input type="number" id="valorCartela" step="0.01" placeholder="Ex: 4.50">
+            <div id="errorValor" class="error"></div>
+        </div>
+
+        <button onclick="simular()">Simular Apostas</button>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Simulando apostas...</p>
+        </div>
+
+        <div id="resultado"></div>
+    </div>
+
+<script>
+function validarNumeros(numeros) {
+    if (numeros.length !== 6) return false;
+    for (let num of numeros) {
+        if (num < 1 || num > 60) return false;
+    }
+    return new Set(numeros).size === 6;
+}
+
+function formatarDinheiro(valor) {
+    return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    }).format(valor);
+}
+
+function simular() {
+    const numerosInput = document.getElementById('numerosAposta').value;
+    const valorCartela = parseFloat(document.getElementById('valorCartela').value);
+    const errorNumeros = document.getElementById('errorNumeros');
+    const errorValor = document.getElementById('errorValor');
+    const loading = document.getElementById('loading');
+    const resultado = document.getElementById('resultado');
+
+    // Limpar mensagens de erro anteriores
+    errorNumeros.textContent = '';
+    errorValor.textContent = '';
+    resultado.style.display = 'none';
+
+    // Validar entrada de números
+    const numerosAposta = numerosInput.split(',').map(n => parseInt(n.trim()));
+    if (!validarNumeros(numerosAposta)) {
+        errorNumeros.textContent = 'Digite 6 números únicos entre 1 e 60, separados por vírgula.';
+        return;
+    }
+
+    // Validar valor da cartela
+    if (isNaN(valorCartela) || valorCartela <= 0) {
+        errorValor.textContent = 'Digite um valor válido para a cartela.';
+        return;
+    }
+
+    loading.style.display = 'block';
+
+    setTimeout(() => {
+        let tentativas = 0;
+        let acertou = false;
+
+        while (!acertou) {
+            tentativas++;
+            
+            // Gerar números aleatórios
+            let numerosGerados = new Set();
+            while (numerosGerados.size < 6) {
+                numerosGerados.add(Math.floor(Math.random() * 60) + 1);
+            }
+            numerosGerados = Array.from(numerosGerados);
+
+            // Verificar acerto
+            acertou = numerosAposta.every(num => numerosGerados.includes(num));
+
+            // Limite de segurança para não travar o navegador
+            if (tentativas >= 1000000) {
+                break;
+            }
+        }
+
+        const custoTotal = tentativas * valorCartela;
+
+        loading.style.display = 'none';
+        resultado.style.display = 'block';
+        resultado.innerHTML = `
+            <h3>Resultado da Simulação:</h3>
+            <p>Números da sua aposta: ${numerosAposta.join(', ')}</p>
+            <p>Total de tentativas: ${tentativas.toLocaleString('pt-BR')}</p>
+            <p>Custo total: ${formatarDinheiro(custoTotal)}</p>
+            ${tentativas >= 1000000 ? 
+                '<p style="color: #FFD700;">Simulação interrompida após 1 milhão de tentativas!</p>' : 
+                '<p style="color: #90EE90;">Parabéns! Seus números foram sorteados!</p>'
+            }
+        `;
+    }, 1000);
+}
+</script>
+</body></html>
